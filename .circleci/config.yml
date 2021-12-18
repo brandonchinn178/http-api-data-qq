@@ -33,6 +33,8 @@ workflows:
 jobs:
   lint:
     executor: circleci-base
+    environment:
+      STACK_YAML: linting/stack-linters.yaml
     steps:
       - checkout
       - install_stack
