@@ -1,0 +1,7 @@
+# MacOSX files
+.DS_Store
+
+.stack-work/
+stack-ghc-*.yaml.lock
+
+.ci/

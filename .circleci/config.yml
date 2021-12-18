@@ -1,0 +1,200 @@
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@1.0.2
+
+workflows:
+  version: 2
+
+  build_and_test:
+    jobs:
+      - lint
+      - haddock
+      - run_sdist
+      - run_build_and_test:
+          name: test_latest
+          latest: true
+      - run_build_and_test:
+          name: test_ghc_9.0
+          stack_yaml: stack-ghc-9.0.yaml
+      - run_build_and_test:
+          name: test_ghc_8.10
+          stack_yaml: stack-ghc-8.10.yaml
+      - run_build_and_test:
+          name: test_ghc_8.8
+          stack_yaml: stack-ghc-8.8.yaml
+      - run_build_and_test:
+          name: test_ghc_8.6
+          stack_yaml: stack-ghc-8.6.yaml
+
+jobs:
+  lint:
+    executor: circleci-base
+    steps:
+      - checkout
+      - install_stack
+      - run:
+          name: Install pre-commit
+          command: |
+            sudo apt-get update -y
+            sudo apt-get install -y python3-pip
+            python3 -m pip install pre-commit
+      - with_stack_cache:
+          steps:
+            - run:
+                name: Install linters
+                command: |
+                  sudo apt-get install -y ncurses-dev
+                  # -j1 to prevent OOM in Circle CI
+                  linting/install.sh -j1
+      - run:
+          name: Lint
+          command: pre-commit run --all-files --show-diff-on-failure
+          ENVIRONMENT:
+            SKIP: no-commit-to-branch
+
+  run_build_and_test:
+    parameters:
+      stack_yaml:
+        type: string
+        default: stack.yaml
+      latest:
+        type: boolean
+        default: false
+
+    executor:
+      name: circleci-base
+      stack_yaml: << parameters.stack_yaml >>
+
+    steps:
+      - checkout
+      - install_stack
+      - with_stack_cache:
+          steps:
+            - build_stack_deps
+            - when:
+                condition: << parameters.latest >>
+                steps:
+                  - run:
+                      name: Install hpc-lcov
+                      command: stack install hpc-lcov
+      - run:
+          name: Build
+          command: |
+            STACK_ARGS=(
+                --test
+                --no-run-tests
+                <<# parameters.latest >>--coverage<</ parameters.latest >>
+            )
+            stack build "${STACK_ARGS[@]}"
+      - run:
+          name: Check Cabal file up to date
+          command: git diff --exit-code *.cabal
+      - run:
+          name: Test
+          command: |
+            STACK_ARGS=(
+                --test
+                <<# parameters.latest >>--coverage<</ parameters.latest >>
+            )
+            stack build "${STACK_ARGS[@]}"
+      - when:
+          condition: << parameters.latest >>
+          steps:
+            - run:
+                name: Run hpc-lcov
+                command: hpc-lcov
+            - codecov/upload:
+                file: lcov.info
+
+  haddock:
+    executor: circleci-base
+    steps:
+      - checkout
+      - install_stack
+      - with_stack_cache:
+          steps:
+            - build_stack_deps
+      - run:
+          name: Build haddock
+          command: stack haddock --no-haddock-deps
+      - run:
+          name: Bundle haddock docs
+          command: |
+            mkdir -p .ci/
+            tar czf .ci/haddock-docs.tar.gz -C "$(find .stack-work/dist -regex '.*/doc/html/[^/]*')" .
+      - store_artifacts:
+          path: .ci/haddock-docs.tar.gz
+
+  run_sdist:
+    executor: circleci-base
+    steps:
+      - checkout
+      - install_stack
+      - with_stack_cache:
+          steps:
+            - run:
+                name: Install GHC
+                command: stack setup
+      - run: stack sdist
+      - run:
+          name: Copy package archive
+          command: |
+            mkdir -p .ci/
+            cp $(stack path --dist-dir)/http-api-data-qq-*.tar.gz .ci/
+      - store_artifacts:
+          path: .ci/
+          destination: .
+
+executors:
+  circleci-base:
+    parameters:
+      stack_yaml:
+        type: string
+        default: stack.yaml
+
+    docker:
+      - image: cimg/base:2021.04
+    shell: /bin/bash -eux -o pipefail
+    environment:
+      STACK_YAML: << parameters.stack_yaml >>
+
+commands:
+  install_stack:
+    steps:
+      - run:
+          name: Install stack
+          command: |
+            sudo apt-get update
+            curl -sSL https://get.haskellstack.org/ | sh
+            stack --version
+
+  build_stack_deps:
+    steps:
+      - run:
+          name: Build stack dependencies
+          command: stack build --test --only-dependencies
+
+  with_stack_cache:
+    parameters:
+      steps:
+        type: steps
+
+    steps:
+      - run:
+          name: Build cache key
+          command: |
+            mkdir -p .ci
+            stack --version | tee .ci/stack-key.txt
+            echo "${STACK_YAML}" | tee -a .ci/stack-key.txt
+            shasum "${STACK_YAML}" | tee -a .ci/stack-key.txt
+      - restore_cache:
+          keys:
+            - v0-{{ .Environment.CIRCLE_JOB }}-{{ checksum ".ci/stack-key.txt" }}-{{ checksum "package.yaml" }}
+            - v0-{{ .Environment.CIRCLE_JOB }}-{{ checksum ".ci/stack-key.txt" }}
+      - << parameters.steps >>
+      - save_cache:
+          key: v0-{{ .Environment.CIRCLE_JOB }}-{{ checksum ".ci/stack-key.txt" }}-{{ checksum "package.yaml" }}
+          paths:
+            - ~/.stack
+            - .stack-work
