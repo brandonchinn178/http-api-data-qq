@@ -35,7 +35,7 @@ library
   ghc-options: -Wall
   build-depends:
       base >=4.12 && <4.17
-    , http-api-data >=0.4.1.1 && <0.5
+    , http-api-data >=0.4.1.1 && <0.6
     , template-haskell >=2.14 && <2.19
     , text >=1.2.3.1 && <1.3
   default-language: Haskell2010
