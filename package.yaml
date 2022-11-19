@@ -18,10 +18,10 @@ github: brandonchinn178/http-api-data-qq
 library:
   source-dirs: src
   dependencies:
-    - base >= 4.12 && < 4.17
+    - base >= 4.12 && < 5
     - http-api-data >= 0.4.1.1 && < 0.6
-    - template-haskell >= 2.14 && < 2.19
-    - text >= 1.2.3.1 && < 1.3
+    - template-haskell >= 2.14 && < 2.20
+    - text >= 1.2.3.1 && < 2.1
 
 tests:
   http-api-data-qq-test:

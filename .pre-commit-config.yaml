@@ -9,13 +9,8 @@ repos:
 
   - repo: local
     hooks:
-      - id: hlint
-        name: hlint
-        language: system
-        files: '\.hs$'
-        entry: linting/run.sh hlint
       - id: fourmolu
         name: fourmolu
         language: system
         files: '\.hs$'
-        entry: linting/run.sh fourmolu -e -i
+        entry: fourmolu -i
