@@ -1,6 +1,0 @@
-resolver: nightly-2021-12-18
-packages: []
-
-extra-deps:
-  - hlint-3.3.5
-  - fourmolu-0.4.0.0
