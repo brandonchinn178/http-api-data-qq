@@ -9,11 +9,6 @@ repos:
 
   - repo: local
     hooks:
-      - id: hlint
-        name: hlint
-        language: system
-        files: '\.hs$'
-        entry: hlint
       - id: fourmolu
         name: fourmolu
         language: system
