@@ -22,9 +22,9 @@ library:
   source-dirs: src
   dependencies:
     - base >= 4.12 && < 5
-    - http-api-data >= 0.4.1.1 && < 0.6
-    - template-haskell >= 2.14 && < 2.21
-    - text >= 1.2.3.1 && < 2.1
+    - http-api-data < 0.6
+    - template-haskell < 2.21
+    - text < 2.1
 
 tests:
   http-api-data-qq-test:
@@ -39,6 +39,6 @@ tests:
       - http-api-data-qq
       - http-client
       - tasty
-      - tasty-hunit
-      - tasty-quickcheck
+      - tasty-hunit >= 0.10
+      - tasty-quickcheck >= 0.8.1
       - text

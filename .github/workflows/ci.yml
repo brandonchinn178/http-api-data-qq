@@ -55,6 +55,9 @@ jobs:
           - '9.2'
           - '9.4'
           - '9.6'
+        include:
+          - ghc_version: '8.6.1'
+            oldest: true
 
     name: ghc_compat_test (${{ matrix.ghc_version }})
     runs-on: ubuntu-latest
@@ -75,6 +78,14 @@ jobs:
             --enable-test
             --test-options='--color=always'
             --test-show-details=streaming
+      -
+        if: ${{ matrix.oldest }}
+        name: Use oldest dependencies
+        run:
+          cabal configure
+            --enable-append --prefer-oldest
+            --constraint 'network >= 2.6'
+            --constraint 'network-uri >= 2.6.3.0'
       -
         name: Get build plan
         run: cabal build --dry-run
