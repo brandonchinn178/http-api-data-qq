@@ -31,10 +31,8 @@ tests:
     source-dirs: test
     main: Main.hs
     dependencies:
-      - aeson
       - base
       - bytestring
-      - containers
       - http-api-data
       - http-api-data-qq
       - http-client

@@ -53,10 +53,8 @@ test-suite http-api-data-qq-test
       test
   ghc-options: -Wall -Wcompat
   build-depends:
-      aeson
-    , base
+      base
     , bytestring
-    , containers
     , http-api-data
     , http-api-data-qq
     , http-client
