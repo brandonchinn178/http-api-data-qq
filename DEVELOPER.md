@@ -19,7 +19,6 @@ To enable locally:
 
 1. Install [`pre-commit`](https://pre-commit.com)
 1. Enable it: `pre-commit install`
-1. Install dependencies: `linting/install.sh`
 
 ## Run tests
 

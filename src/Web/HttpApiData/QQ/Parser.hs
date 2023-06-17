@@ -29,7 +29,7 @@ but defining helpers here to roughly mimic megaparsec's API, which is more
 readable than ReadP's API.
 --}
 
-runParser :: Show a => ReadP a -> String -> Either String a
+runParser :: (Show a) => ReadP a -> String -> Either String a
 runParser p s =
   case filter (null . snd) (readP_to_S p s) of
     [(x, "")] -> Right x
