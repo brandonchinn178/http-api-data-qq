@@ -32,13 +32,15 @@ library
       Paths_http_api_data_qq
   hs-source-dirs:
       src
-  ghc-options: -Wall
+  ghc-options: -Wall -Wcompat
   build-depends:
       base >=4.12 && <5
     , http-api-data >=0.4.1.1 && <0.6
     , template-haskell >=2.14 && <2.21
     , text >=1.2.3.1 && <2.1
   default-language: Haskell2010
+  if impl(ghc >= 8.10)
+    ghc-options: -Wunused-packages
 
 test-suite http-api-data-qq-test
   type: exitcode-stdio-1.0
@@ -49,7 +51,7 @@ test-suite http-api-data-qq-test
       Paths_http_api_data_qq
   hs-source-dirs:
       test
-  ghc-options: -Wall
+  ghc-options: -Wall -Wcompat
   build-depends:
       aeson
     , base
@@ -63,3 +65,5 @@ test-suite http-api-data-qq-test
     , tasty-quickcheck
     , text
   default-language: Haskell2010
+  if impl(ghc >= 8.10)
+    ghc-options: -Wunused-packages
