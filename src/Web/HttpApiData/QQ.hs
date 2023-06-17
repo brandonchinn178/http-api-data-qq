@@ -13,17 +13,16 @@ import Web.HttpApiData (toUrlPiece)
 
 import Web.HttpApiData.QQ.Parser
 
-{- |
-A quasiquoter to build a URL by interpolating values via ToHttpApiData.
-The resulting value can be any IsString type.
-
-Currently only supports single variable names being interpolated, not
-arbitrary Haskell expressions.
-
-Usage:
-
->>> [url|/foo/#{fooId}/bar|]
--}
+-- |
+-- A quasiquoter to build a URL by interpolating values via ToHttpApiData.
+-- The resulting value can be any IsString type.
+--
+-- Currently only supports single variable names being interpolated, not
+-- arbitrary Haskell expressions.
+--
+-- Usage:
+--
+-- >>> [url|/foo/#{fooId}/bar|]
 url :: QuasiQuoter
 url =
   QuasiQuoter

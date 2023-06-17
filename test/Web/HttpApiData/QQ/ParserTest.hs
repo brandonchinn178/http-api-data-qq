@@ -31,19 +31,18 @@ tests =
            in parseUrlPieces input === Right expected
     ]
 
-{- |
-For two generators A and B, generates a list where each element
-alternates between the two generators.
-
-e.g.
-  * []
-  * [A]
-  * [B]
-  * [A, B]
-  * [B, A]
-  * [A, B, A]
-  * [B, A, B]
--}
+-- |
+-- For two generators A and B, generates a list where each element
+-- alternates between the two generators.
+--
+-- e.g.
+--   * []
+--   * [A]
+--   * [B]
+--   * [A, B]
+--   * [B, A]
+--   * [A, B, A]
+--   * [B, A, B]
 alternatingListOf :: Gen a -> Gen a -> Gen [a]
 alternatingListOf genA genB = do
   startOnB <- arbitrary
