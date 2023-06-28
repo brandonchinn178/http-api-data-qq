@@ -22,7 +22,7 @@ library:
   source-dirs: src
   dependencies:
     - base >= 4.12 && < 5
-    - http-api-data < 0.6
+    - http-api-data < 0.7
     - template-haskell < 2.21
     - text < 2.1
 

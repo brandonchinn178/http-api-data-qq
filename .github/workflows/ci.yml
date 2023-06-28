@@ -28,9 +28,6 @@ jobs:
         name: Check that Cabal file was generated
         run: git diff --exit-code '*.cabal'
       -
-        name: Check for outdated packages
-        run: cabal outdated --exit-code
-      -
         name: Generate coverage data
         run: |
           HPC_LCOV_VERSION=1.1.1
