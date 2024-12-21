@@ -23,7 +23,7 @@ library:
   dependencies:
     - base >= 4.12 && < 5
     - http-api-data < 0.7
-    - template-haskell < 2.22
+    - template-haskell < 2.24
     - text < 2.2
 
 tests:

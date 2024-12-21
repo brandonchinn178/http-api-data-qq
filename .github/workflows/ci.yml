@@ -28,7 +28,7 @@ jobs:
       -
         name: Generate coverage data
         run: |
-          HPC_LCOV_VERSION=1.1.1
+          HPC_LCOV_VERSION=1.2.0
           curl -fsSL \
             "https://github.com/brandonchinn178/hpc-lcov/releases/download/v${HPC_LCOV_VERSION}/hpc-lcov-${HPC_LCOV_VERSION}-linux-x86_64" \
             -o /usr/local/bin/hpc-lcov
@@ -50,6 +50,9 @@ jobs:
           - '9.2'
           - '9.4'
           - '9.6'
+          - '9.8'
+          - '9.10'
+          - '9.12'
         include:
           - ghc_version: '8.6.1'
             oldest: true
@@ -73,6 +76,17 @@ jobs:
             --enable-test
             --test-options='--color=always'
             --test-show-details=streaming
+      -
+        # TODO: remove when packages support 9.12
+        name: Allow packages to use GHC 9.12
+        run:
+          cabal configure --enable-append
+            --allow-newer='http-api-data:base'
+            --allow-newer='uuid-types:template-haskell'
+            --allow-newer='unordered-containers:template-haskell'
+            --allow-newer='time-compat:base'
+            --allow-newer='time-compat:time'
+            --allow-newer='integer-conversion:base'
       -
         if: ${{ matrix.oldest }}
         name: Use oldest dependencies
