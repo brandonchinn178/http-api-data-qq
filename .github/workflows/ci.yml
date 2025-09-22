@@ -147,7 +147,7 @@ jobs:
         name: Create sdist bundle
         run: stack sdist --test-tarball --tar-dir .
       -
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: http-api-data-qq-sdist
           path: http-api-data-qq-*.tar.gz
