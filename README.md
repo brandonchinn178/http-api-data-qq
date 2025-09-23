@@ -1,6 +1,6 @@
 # `http-api-data-qq`
 
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/brandonchinn178/brandonchinn178%2Fhttp-api-data-qq/CI?branch=main)](https://github.com/brandonchinn178/http-api-data-qq/actions/workflows/ci.yml?query=branch%3Amain)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/brandonchinn178/http-api-data-qq/ci.yml?branch=main)](https://github.com/brandonchinn178/http-api-data-qq/actions/workflows/ci.yml?query=branch%3Amain)
 [![Hackage](https://img.shields.io/hackage/v/http-api-data-qq)](https://hackage.haskell.org/package/http-api-data-qq)
 [![Codecov](https://img.shields.io/codecov/c/gh/brandonchinn178/http-api-data-qq)](https://codecov.io/gh/brandonchinn178/http-api-data-qq)
 
