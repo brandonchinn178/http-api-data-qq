@@ -22,9 +22,9 @@ library:
   source-dirs: src
   dependencies:
     - base >= 4.12 && < 5
-    - http-api-data < 0.7
-    - template-haskell < 2.24
-    - text < 2.2
+    - http-api-data
+    - template-haskell
+    - text
 
 tests:
   http-api-data-qq-test:
